@@ -1,54 +1,72 @@
 <?php
 namespace App\DomainModel;
 use App\Models\Operacion;
+use App\Services\ServiciosTecnicos;
 
 class Modelo
 {
-  public static function calcularOperacion($tipo, $n){ 
-    $operacion = Operacion::where(['operacion' => $tipo, 'valor' => $n])->first();
-    
-    if ($operacion !== null) {
-        return $operacion;
-    } 
+    private ServiciosTecnicos $serviciosTecnicos;
 
+    public function __construct()
+    {
+        $this->serviciosTecnicos = ServiciosTecnicos::getInstance();
+    }
+  public function calcularOperacion($tipo, $n): Operacion{
     switch ($tipo) {
         case 'factorial':
-            $resultado = Modelo::factorial($n);
-            break;
+            return $this->factorial($n);
         case 'fibonacci':
-            $resultado = Modelo::fibonacci($n);
-            break;
+            return $this->fibonacci($n);
         case 'ackerman':
-            $resultado = Modelo::ackerman(1, $n);
-            break;
+            $operacion = $this->serviciosTecnicos->buscar(new Operacion('ackerman', $n));
+            if($operacion != null){
+                return $operacion;
+            }
+            $resultado = $this->ackerman($n);
+            $operacion = new Operacion('ackerman', $n, $resultado);
+            $this->serviciosTecnicos->save($operacion);
+            return $operacion;
         default:
-            $resultado = 0;
-            break;
+            return new Operacion($tipo, $n, 0);
     }
-
-    $operacion = new Operacion($tipo, $n, $resultado);
-
-    Operacion::create($operacion->toArray());
-
-    return $operacion;
-  }
-  
-  private static function factorial($n) : int {
-      if ($n == 0 || $n == 1) return 1;
-      return $n * self::factorial($n - 1);
   }
 
-  private static function fibonacci($n) : int {
-      if($n < 2) return $n;
-      return self::fibonacci($n - 1) + self::fibonacci($n - 2);
+  private  function factorial($n) : Operacion {
+        $operacion = $this->serviciosTecnicos->buscar(new Operacion('factorial', $n));
+        if($operacion != null){
+            return $operacion;
+        }
+      if ($n == 0 || $n == 1){
+          $operacion = new Operacion( 'factorial', $n, 1);
+          $this->serviciosTecnicos->save($operacion);
+          return $operacion;
+      }
+      $operacion = new Operacion('factorial', $n, $n * $this->factorial($n - 1)->getResultado());
+      $this->serviciosTecnicos->save($operacion);
+      return $operacion;
   }
 
-  private static function ackerman($m = 1, $n) : int {
+  private  function fibonacci($n) : Operacion {
+      $operacion = $this->serviciosTecnicos->buscar(new Operacion( 'fibonacci', $n));
+      if($operacion != null){
+          return $operacion;
+      }
+      if($n < 2) {
+          $operacion = new Operacion( 'fibonacci', $n, $n);
+          $this->serviciosTecnicos->save($operacion);
+          return $operacion;
+      }
+      $operacion = new Operacion("fibonacci", $n, $this->fibonacci($n - 1)->getResultado() + $this->fibonacci($n - 2)->getResultado());
+      $this->serviciosTecnicos->save($operacion);
+      return $operacion;
+  }
+
+  private function ackerman($n,$m=1) : int {
       if ($m == 0) {
           return $n + 1;
       } elseif ($n == 0) {
-          return self::ackerman($m - 1, 1);
-      } 
-      return self::ackerman($m - 1, self::ackerman($m, $n - 1));
+          return $this->ackerman(1, $m-1);
+      }
+      return $this->ackerman($this->ackerman($n-1,$m),$m-1);
   }
 }

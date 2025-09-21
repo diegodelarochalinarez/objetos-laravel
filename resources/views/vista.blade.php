@@ -10,7 +10,8 @@
   </head>
   <body class="flex items-center justify-center min-h-screen bg-gray-100 text-1.5xl">
     <div class="bg-white shadow-lg rounded-xl p-6 w-80">
-      <form method="GET">
+      <form method="POST">
+        @csrf
         <div class="mb-4 flex flex-row items-center">
           <label for="numero" class="block text-gray-700 font-medium mb-1 mr-8">Número</label>
           <input type="number" id="numero" name="n" value="{{ old('n', $operacion->valor) }}" required
@@ -20,14 +21,14 @@
         <div class="mb-4 flex flex-row items-center">
           <label class="block mr-2 text-gray-700 font-medium">Resultado:</label>
           <div id="resultado" class="w-full">
-            <p class="font-semibold text-center">{{$operacion->resultado}}</p>
+            <p class="font-semibold text-center">{{$operacion->getResultado()}}</p>
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
-          <button type="submit" formaction="{{ url('/factorial') }}/{{ old('n') }}" class="bg-cyan-700 text-white py-2 rounded-lg shadow hover:bg-cyan-800 transition">Factorial</button>
-          <button type="submit" formaction="{{ url('/fibonacci') }}/{{ old('n') }}" class="bg-cyan-700 text-white py-2 rounded-lg shadow hover:bg-cyan-800 transition">Fibonacci</button>
-          <button type="submit" formaction="{{ url('/ackerman') }}/{{ old('n') }}" class="bg-cyan-700 text-white py-2 rounded-lg shadow hover:bg-cyan-800 transition">Ackerman</button>
+          <button type="submit" formaction="{{ url('/factorial') }}" class="bg-cyan-700 text-white py-2 rounded-lg shadow hover:bg-cyan-800 transition">Factorial</button>
+          <button type="submit" formaction="{{ url('/fibonacci') }}" class="bg-cyan-700 text-white py-2 rounded-lg shadow hover:bg-cyan-800 transition">Fibonacci</button>
+          <button type="submit" formaction="{{ url('/ackerman') }}" class="bg-cyan-700 text-white py-2 rounded-lg shadow hover:bg-cyan-800 transition">Ackerman</button>
           <button type="submit" formaction="{{ url('/') }}" class="bg-cyan-700 text-white py-2 rounded-lg shadow hover:bg-cyan-800 transition">Limpiar</button>
         </div>
       </form>

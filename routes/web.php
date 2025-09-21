@@ -5,5 +5,7 @@ use App\Models\Operacion;
 use App\Http\Controllers\OperacionController;
 
 Route::get('/', [OperacionController::class, 'limpiarBtn']);
-Route::get('/{tipo}', [OperacionController::class, 'calculosBtn']);
+Route::post('/{tipo}', [OperacionController::class, 'calculosBtn'])
+    ->where('tipo', '^(factorial|fibonacci|ackerman)$');
+
 

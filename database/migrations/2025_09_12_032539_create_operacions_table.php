@@ -11,12 +11,13 @@ return new class extends Migration
      */
 
     public function up(): void
-    { 
+    {
         Schema::create('operacions', function (Blueprint $table) {
-            $table->id();
             $table->string('operacion');
             $table->integer('valor');
-            $table->string('resultado');
+            $table->integer('resultado');
+
+            $table->primary(['operacion', 'valor']);
         });
     }
 
