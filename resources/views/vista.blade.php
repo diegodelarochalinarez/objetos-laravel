@@ -29,7 +29,7 @@
           <button type="submit" formaction="{{ url('/factorial') }}" class="bg-cyan-700 text-white py-2 rounded-lg shadow hover:bg-cyan-800 transition">Factorial</button>
           <button type="submit" formaction="{{ url('/fibonacci') }}" class="bg-cyan-700 text-white py-2 rounded-lg shadow hover:bg-cyan-800 transition">Fibonacci</button>
           <button type="submit" formaction="{{ url('/ackerman') }}" class="bg-cyan-700 text-white py-2 rounded-lg shadow hover:bg-cyan-800 transition">Ackerman</button>
-          <button type="submit" formaction="{{ url('/') }}" class="bg-cyan-700 text-white py-2 rounded-lg shadow hover:bg-cyan-800 transition">Limpiar</button>
+          <button type="submit" formaction="{{ url('/') }}" formmethod="GET" class="bg-cyan-700 text-white py-2 rounded-lg shadow hover:bg-cyan-800 transition">Limpiar</button>
         </div>
       </form>
     </div>
