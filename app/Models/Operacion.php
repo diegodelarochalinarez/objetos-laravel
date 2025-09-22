@@ -11,10 +11,6 @@ class Operacion extends Model
 
     public function __construct($tipo = null, $n = null, $resultado = null)
     {
-        if (is_array($tipo)) {
-            parent::__construct($tipo);
-            return;
-        }
         parent::__construct();
         if ($tipo !== null) {
             $this->setAttribute('operacion', $tipo);
