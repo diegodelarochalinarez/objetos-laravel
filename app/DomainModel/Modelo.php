@@ -1,6 +1,7 @@
 <?php
 namespace App\DomainModel;
 use App\Models\Operacion;
+use App\Models\OperacionDominio;
 use App\Services\ServiciosTecnicos;
 
 class Modelo
@@ -11,19 +12,19 @@ class Modelo
     {
         $this->serviciosTecnicos = ServiciosTecnicos::getInstance();
     }
-  public function calcularOperacion($tipo, $n): Operacion{
+  public function calcularOperacion($tipo, $n): OperacionDominio{
     switch ($tipo) {
         case 'factorial':
             return $this->factorial($n);
         case 'fibonacci':
             return $this->fibonacci($n);
         case 'ackerman':
-            $operacion = $this->serviciosTecnicos->buscar(new Operacion('ackerman', $n));
+            $operacion = $this->serviciosTecnicos->buscar(new OperacionDominio('ackerman', $n));
             if($operacion != null){
                 return $operacion;
             }
             $resultado = $this->ackerman($n);
-            $operacion = new Operacion('ackerman', $n, $resultado);
+            $operacion = new OperacionDominio('ackerman', $n, $resultado);
             $this->serviciosTecnicos->save($operacion);
             return $operacion;
         default:
@@ -31,32 +32,32 @@ class Modelo
     }
   }
 
-  private  function factorial($n) : Operacion {
-        $operacion = $this->serviciosTecnicos->buscar(new Operacion('factorial', $n));
+  private  function factorial($n) : OperacionDominio {
+        $operacion = $this->serviciosTecnicos->buscar(new OperacionDominio('factorial', $n));
         if($operacion != null){
             return $operacion;
         }
       if ($n == 0 || $n == 1){
-          $operacion = new Operacion( 'factorial', $n, 1);
+          $operacion = new OperacionDominio( 'factorial', $n, 1);
           $this->serviciosTecnicos->save($operacion);
           return $operacion;
       }
-      $operacion = new Operacion('factorial', $n, $n * $this->factorial($n - 1)->getResultado());
+      $operacion = new OperacionDominio('factorial', $n, $n * $this->factorial($n - 1)->getResultado());
       $this->serviciosTecnicos->save($operacion);
       return $operacion;
   }
 
-  private  function fibonacci($n) : Operacion {
-      $operacion = $this->serviciosTecnicos->buscar(new Operacion( 'fibonacci', $n));
+  private  function fibonacci($n) : OperacionDominio{
+      $operacion = $this->serviciosTecnicos->buscar(new OperacionDominio( 'fibonacci', $n));
       if($operacion != null){
           return $operacion;
       }
       if($n < 2) {
-          $operacion = new Operacion( 'fibonacci', $n, $n);
+          $operacion = new OperacionDominio( 'fibonacci', $n, $n);
           $this->serviciosTecnicos->save($operacion);
           return $operacion;
       }
-      $operacion = new Operacion("fibonacci", $n, $this->fibonacci($n - 1)->getResultado() + $this->fibonacci($n - 2)->getResultado());
+      $operacion = new OperacionDominio("fibonacci", $n, $this->fibonacci($n - 1)->getResultado() + $this->fibonacci($n - 2)->getResultado());
       $this->serviciosTecnicos->save($operacion);
       return $operacion;
   }

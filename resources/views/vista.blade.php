@@ -14,7 +14,7 @@
         @csrf
         <div class="mb-4 flex flex-row items-center">
           <label for="numero" class="block text-gray-700 font-medium mb-1 mr-8">Número</label>
-          <input type="number" id="numero" name="n" value="{{ old('n', $operacion->valor) }}" required
+          <input type="number" id="numero" name="n" value="{{ old('n', $operacion->setN()) }}" required
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
         </div>
 

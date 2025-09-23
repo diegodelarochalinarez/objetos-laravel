@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Operacion;
+use App\Models\OperacionDominio;
 use Exception;
 
 class ServiciosTecnicos
@@ -25,12 +26,16 @@ class ServiciosTecnicos
         // Impide clonar la instancia
     }
 
-    public function buscar(Operacion $op):?Operacion{
-        return Operacion::where(['operacion' => $op->getOperacion(), 'valor' => $op->getValor()])->first();
+    public function buscar(OperacionDominio $op):?OperacionDominio{
+        $operacionM =Operacion::where(['operacion' => $op->getTipo(), 'valor' => $op->getN()])->first();
+        if($operacionM == null){
+            return null;
+        }
+        return $operacionM->getObjeto();
     }
 
-    public function save(Operacion $op):void{
-        // Persist the given model instance using its current attributes
+    public function save(OperacionDominio $op):void{
+        $op = new Operacion($op);
         $op->save();
     }
     public function __wakeup(): void

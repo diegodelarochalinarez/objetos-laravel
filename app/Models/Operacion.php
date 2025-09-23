@@ -9,8 +9,11 @@ class Operacion extends Model
     public $timestamps = false;
     public $incrementing = false;
 
-    public function __construct($tipo = null, $n = null, $resultado = null)
+    public function __construct(OperacionDominio $operacionDominio = new OperacionDominio(null, null, null))
     {
+        $tipo = $operacionDominio->getTipo();
+        $n = $operacionDominio->getN();
+        $resultado = $operacionDominio->getResultado();
         parent::__construct();
         if ($tipo !== null) {
             $this->setAttribute('operacion', $tipo);
@@ -23,17 +26,10 @@ class Operacion extends Model
         }
     }
 
-    public function getOperacion()
+    public function getObjeto()
     {
-        return $this->getAttribute('operacion');
-    }
-    public function getValor()
-    {
-        return $this->getAttribute('valor');
-    }
-    public function getResultado()
-    {
-        return $this->getAttribute('resultado');
+        $objeto = new OperacionDominio($this->getAttribute('operacion'), $this->getAttribute('valor'), $this->getAttribute('resultado'));
+        return $objeto;
     }
 
     protected function setKeysForSaveQuery($query)
